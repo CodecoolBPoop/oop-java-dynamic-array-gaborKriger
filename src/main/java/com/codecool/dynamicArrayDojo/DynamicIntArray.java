@@ -37,17 +37,15 @@ public class DynamicIntArray {
     }
 
     void remove(int number) {
-        int occurrenceCounter = 0;
-        for (int aStorage : storage) {
-            if (aStorage == number) {
-                occurrenceCounter++;
-            }
-        }
-
+        int occurrenceCounter = getOccurrenceCounter(number);
         if (occurrenceCounter == 0) {
             throw new ArrayIndexOutOfBoundsException();
         }
+        int[] temporaryStorage = fillTemporaryStorage(number, occurrenceCounter);
+        storage = temporaryStorage;
+    }
 
+    private int[] fillTemporaryStorage(int number, int occurrenceCounter) {
         int[] temporaryStorage = new int[storage.length - occurrenceCounter];
         int temporaryStorageIndex = 0;
         for (int aStorage : storage) {
@@ -56,7 +54,17 @@ public class DynamicIntArray {
                 temporaryStorageIndex++;
             }
         }
-        storage = temporaryStorage;
+        return temporaryStorage;
+    }
+
+    private int getOccurrenceCounter(int number) {
+        int occurrenceCounter = 0;
+        for (int aStorage : storage) {
+            if (aStorage == number) {
+                occurrenceCounter++;
+            }
+        }
+        return occurrenceCounter;
     }
 
     void insert(int index, int number) {
